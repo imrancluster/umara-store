@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  web:
+    container_name: umara_api
+    restart: always
+    build: .
+    environment:
+      - UMARA_CONSUL_URL=consul:8500
+      - UMARA_CONSUL_PATH=umara
+      - DEBUG=true
+    ports:
+      - 5000:5000
+    depends_on:
+      - db
+      - redis
+      - consul
+
+  db:
+    container_name: umara_db
+    image: postgres:11.4-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_DB=postgres
+    ports:
+      - 5431:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    container_name: umara_redis
+    image: redis:alpine
+    ports:
+      - 6378:6379
+
+  consul:
+    container_name: umara_consul
+    image: consul:latest
+    ports:
+      - 8500:8500
+
+volumes:
+  pgdata:

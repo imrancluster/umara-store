@@ -1,1 +1,1 @@
-# umara_core
+# umara-store
